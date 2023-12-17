@@ -21,8 +21,8 @@ function getCity() {
         cityListContainer(data[0]);
         cityList.appendChild(recentCity);
 
-        let lat = data[0].lat;
-        let lon = data[0].lon;
+        let lat = data.coord.lat;
+        let lon = data.coord.lon;
 
         getLocation(lat, lon);
      });
@@ -101,7 +101,7 @@ function getLocation(lat, lon) {
 
 function cityListContainer(recent) {
     var pageRefresh = JSON.parse(localStorage.getItem('cities')) || [];
-    pageRefresh.push({ lat: recent[0].lat, lon: recent[0].lon });
+    pageRefresh.push({ lat: recent.lat, lon: recent.lon });
     localStorage.setItem('cities', JSON.stringify(pageRefresh));
 }
 
@@ -136,15 +136,15 @@ document.getElementById('user-search').addEventListener('click', function (event
 });
 
 function getSearhedCity(cityName) {
-    const cityQuery = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&units=imperial&appid=' + apiKey;
-    fetch(cityQuery)
+    const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&units=imperial&appid=' + apiKey;
+    fetch(apiUrl)
     .then(function (response) {
         return response.json();
      })
      .then(function (data) {
         weatherContainer.innerHTML = '';
-        let lat = data[0].lat;
-        let lon = data[0].lon;
+        let lat = data.coord.lat;
+        let lon = data.coord.lon;
         getLocation(lat, lon);
      });
     }
